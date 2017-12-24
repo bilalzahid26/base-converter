@@ -1,7 +1,9 @@
 package com.company;
 
+import java.awt.*;
+import java.math.BigInteger;
 import java.util.Arrays;
-
+import javax.swing.*;
 
 public class Main {
 
@@ -20,7 +22,7 @@ public class Main {
     public static int hexToDec(String num) {
         int sign = 1;
         if (num.contains("-")) {
-num = num.replaceAll("-", "");
+            num = num.replaceAll("-", "");
             sign = sign * -1;
         }
         int dec = 0;
@@ -95,19 +97,19 @@ num = num.replaceAll("-", "");
         if (num < 0) {
 
             sign = sign + "-";
-            num = num *-1;
+            num = num * -1;
         }
         String hexVal = "";
 
 
         String binaryEqv = decToBinary(num);
         int newPlace = binaryEqv.length() % 4;
-        for (int i = 0; i < newPlace; i++) {
+        for (int i = 0; i < 4 - newPlace; i++) {
             binaryEqv = "0" + binaryEqv;
         }
         String newBin = "";
-        for (int i = binaryEqv.length() - 1; i >= 0; i--)
-            newBin = newBin + binaryEqv.charAt(i);
+//        for (int i = binaryEqv.length() - 1; i >= 0; i--)
+//            newBin = newBin + binaryEqv.charAt(i);
         String hex[] = binaryEqv.split("(?<=\\G.{" + 4 + "})");
 
 
@@ -167,7 +169,7 @@ num = num.replaceAll("-", "");
         }
 
 
-        return sign + hexVal.replaceFirst ("^0*", "");
+        return sign + hexVal;//.replaceFirst("^0*", "");
     }
 
     public static String octalToBinary(String oct) {
@@ -181,12 +183,12 @@ num = num.replaceAll("-", "");
 
     }
 
-    public static int octalToDec(String num){
-    int sign = 1;
+    public static int octalToDec(String num) {
+        int sign = 1;
         if (num.contains("-")) {
-        num = num.replaceAll("-", "");
-        sign = sign * -1;
-    }
+            num = num.replaceAll("-", "");
+            sign = sign * -1;
+        }
 
 
         int dec = 0;
@@ -201,7 +203,7 @@ num = num.replaceAll("-", "");
             dec = dec + (Integer.parseInt(octSplit[i]) * place);
             place = place * 8;
         }
-        return dec*sign;
+        return dec * sign;
     }
 
     public static String decToOctal(int num) {
@@ -210,12 +212,12 @@ num = num.replaceAll("-", "");
         if (num < 0) {
 
             sign = sign + "-";
-            num = num *-1;
+            num = num * -1;
         }
         String binaryEqv = decToBinary(num);
 
         int newPlace = binaryEqv.length() % 3;
-        for (int i = 0; i < newPlace+1; i++) {
+        for (int i = 0; i < 3-newPlace; i++) {
             binaryEqv = "0" + binaryEqv;
         }
         String newBin = "";
@@ -226,7 +228,7 @@ num = num.replaceAll("-", "");
         for (int i = 0; i < octal.length; i++) {
             octalVal = octalVal + Integer.toString(binaryToDec(octal[i]));
         }
-        return sign + octalVal.replaceFirst ("^0*", "");
+        return sign + octalVal.replaceFirst("^0*", "");
     }
 
     public static String binaryToOct(String bin) {
@@ -272,7 +274,7 @@ num = num.replaceAll("-", "");
         if (num < 0) {
 
             sign = sign + "-";
-            num = num *-1;
+            num = num * -1;
         }
 
         String binaryRep[] = new String[10];
@@ -281,33 +283,51 @@ num = num.replaceAll("-", "");
         Arrays.fill(binaryRep, "0");
         int index = 0;
 
-            while (num > 0) {
-                binaryRep[index++] = Integer.toString(num % 2);
-                num = num / 2;
-            }
-            for (int i = binaryRep.length - 1; i >= 0; i--) {
-                bin = bin + binaryRep[i];
-            }
+        while (num > 0) {
+            binaryRep[index++] = Integer.toString(num % 2);
+            num = num / 2;
+        }
+        for (int i = binaryRep.length - 1; i >= 0; i--) {
+            bin = bin + binaryRep[i];
+        }
 
-        return sign + bin.replaceFirst ("^0*", "");
+        return sign + bin.replaceFirst("^0*", "");
     }
 
     public static void main(String a[]) {
-        System.out.println(decToHex(-87));
-        System.out.println(decToOctal(-87));
-        System.out.println(decToBinary(-87));
 
-        System.out.println(binaryToDec("-0001010111"));
-        System.out.println(binaryToHex("-0001010111"));
-        System.out.println(binaryToOct("-0001010111"));
+        int content = -34;
+        String contentb = decToBinary(content);
+        String contentH = decToHex(content);
+        String contento = decToOctal(content);
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Dimension d = new Dimension(400, 400);
+        frame.setPreferredSize(d);
+        JLabel label = new JLabel();
+        String text = ("<html>" +
+                "Decimal Conversions" + "<br>" +
+                "The value of " + content + " in BINARY is: " + decToBinary(content)) + "<br>" +
+                ("The value of " + content + " in HEX is: " + decToHex(content)) + "<br>" +
+                ("The value of " + content + " in OCT is: " + decToOctal(content)) + "<br>" +
+                (" ") + "<br>" +
+                "Binary Conversions" + "<br>" +
+                ("The value of " + contentb + " in HEX is: " + binaryToHex(contentb)) + "<br>" +
+                ("The value of " + contentb + " in OCT is: " + binaryToOct(contentb)) + "<br>" +
+                (" ") + "<br>" +
+                "Hexadecimal Conversions" + "<br>" +
+                ("The value of " + contentH + " in BINARY is: " + hexToBinary(contentH)) + "<br>" +
+                ("The value of " + contentH + " in OCT is: " + hexToOctal(contentH)) + "<br>" +
+                (" ") + "<br>" +
+                "Octal Conversions" + "<br>" +
+                ("The value of " + contento + " in BINARY is: " + octalToBinary(contento)) + "<br>" +
+                ("The value of " + contento + " in HEX is: " + octToHex(contento)) + "<br>" + "<html>";
+        label.setText(text);
+        frame.add(label);
+        frame.pack();
+        frame.setVisible(true);
 
-       System.out.println(hexToDec("-057"));
-        System.out.println(hexToOctal("-057"));
-        System.out.println(hexToBinary("-057"));
 
-        System.out.println(octalToDec("-0127"));
-        System.out.println(octalToBinary("-0127"));
-        System.out.println(octToHex("-0127"));
     }
 
 
