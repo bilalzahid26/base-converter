@@ -5,26 +5,7 @@ import java.util.Arrays;
 
 public class Main {
 
-    public static int binaryToDecStand(String bin) {
-        int dec = 0;
-        int place = 1;
-        String newBin = "";
 
-        String binaryRep[] = bin.split("");
-
-
-        for (int i = binaryRep.length - 1; i >= 0; i--)
-            newBin = newBin + binaryRep[i];
-
-        String binSplit[] = newBin.split("");
-        for (int i = 0; i < binSplit.length; i++) {
-            dec = dec + (Integer.parseInt(binSplit[i]) * place);
-            place = place * 2;
-        }
-
-
-        return dec;
-    }
     public static String hexToBinary(String hex) {
 
         return decToBinary(hexToDec(hex));
@@ -37,6 +18,11 @@ public class Main {
     }
 
     public static int hexToDec(String num) {
+        int sign = 1;
+        if (num.contains("-")) {
+num = num.replaceAll("-", "");
+            sign = sign * -1;
+        }
         int dec = 0;
         int place = 1;
         String num1 = num;
@@ -101,16 +87,19 @@ public class Main {
             dec = dec + (Integer.parseInt(hexSplit[i]) * place);
             place = place * 16;
         }
-        return dec;
+        return dec * sign;
     }
 
     public static String decToHex(int num) {
-        boolean twos = false;
+        String sign = "";
         if (num < 0) {
-            num = num * -1;
-            twos = true;
 
+            sign = sign + "-";
+            num = num *-1;
         }
+        String hexVal = "";
+
+
         String binaryEqv = decToBinary(num);
         int newPlace = binaryEqv.length() % 4;
         for (int i = 0; i < newPlace; i++) {
@@ -120,13 +109,11 @@ public class Main {
         for (int i = binaryEqv.length() - 1; i >= 0; i--)
             newBin = newBin + binaryEqv.charAt(i);
         String hex[] = binaryEqv.split("(?<=\\G.{" + 4 + "})");
-        String hexVal = "";
-
 
 
         for (int i = 0; i < hex.length; i++) {
             String hexAct = "";
-            switch (binaryToDecStand(hex[i])) {
+            switch (binaryToDec(hex[i])) {
                 case 1:
                     hexAct = "1";
                     break;
@@ -180,8 +167,7 @@ public class Main {
         }
 
 
-
-        return hexVal;
+        return sign + hexVal.replaceFirst ("^0*", "");
     }
 
     public static String octalToBinary(String oct) {
@@ -195,7 +181,14 @@ public class Main {
 
     }
 
-    public static int octalToDec(String num) {
+    public static int octalToDec(String num){
+    int sign = 1;
+        if (num.contains("-")) {
+        num = num.replaceAll("-", "");
+        sign = sign * -1;
+    }
+
+
         int dec = 0;
         int place = 1;
         String num1 = num;
@@ -208,24 +201,32 @@ public class Main {
             dec = dec + (Integer.parseInt(octSplit[i]) * place);
             place = place * 8;
         }
-        return dec;
+        return dec*sign;
     }
 
     public static String decToOctal(int num) {
+
+        String sign = "";
+        if (num < 0) {
+
+            sign = sign + "-";
+            num = num *-1;
+        }
         String binaryEqv = decToBinary(num);
+
         int newPlace = binaryEqv.length() % 3;
-        for (int i = 0; i < newPlace - 1; i++) {
+        for (int i = 0; i < newPlace+1; i++) {
             binaryEqv = "0" + binaryEqv;
         }
         String newBin = "";
-        for (int i = binaryEqv.length() - 1; i >= 0; i--)
-            newBin = newBin + binaryEqv.charAt(i);
+//        for (int i = binaryEqv.length() - 1; i >= 0; i--)
+//            newBin = newBin + binaryEqv.charAt(i);
         String octal[] = binaryEqv.split("(?<=\\G.{" + 3 + "})");
         String octalVal = "";
         for (int i = 0; i < octal.length; i++) {
             octalVal = octalVal + Integer.toString(binaryToDec(octal[i]));
         }
-        return octalVal;
+        return sign + octalVal.replaceFirst ("^0*", "");
     }
 
     public static String binaryToOct(String bin) {
@@ -239,35 +240,20 @@ public class Main {
 
     }
 
-    public static int binaryToDec(String bin) {
+    public static int binaryToDec(String num) {
+        int sign = 1;
+        if (num.contains("-")) {
+            num = num.replaceAll("-", "");
+            sign = sign * -1;
+        }
         int dec = 0;
         int place = 1;
         String newBin = "";
-        boolean twos = false;
-        char first = bin.charAt(0); // just like array, string index is zero based
 
-        if (first == '1') {
-            twos = true;
-        }
-        String binaryRep[] = bin.split("");
 
-        if (twos == true) {
-            for (int i = 0; i < binaryRep.length; i++) {
-                if (binaryRep[i].equals("1")) {
-                    binaryRep[i] = "0";
+        String binaryRep[] = num.split("");
 
-                } else if (binaryRep[i].equals("0")) {
-                    binaryRep[i] = "1";
-                }
-            }
-            if (binaryRep[binaryRep.length-1].equals("1")) {
-                binaryRep[binaryRep.length-1] = "0";
 
-            } else {
-                binaryRep[binaryRep.length-1] = "1";
-            }
-
-        }
         for (int i = binaryRep.length - 1; i >= 0; i--)
             newBin = newBin + binaryRep[i];
 
@@ -277,55 +263,52 @@ public class Main {
             place = place * 2;
         }
 
-if (twos == true){
-            dec = dec*-1;
-}
-        return dec;
+
+        return dec * sign;
     }
 
     public static String decToBinary(int num) {
+        String sign = "";
+        if (num < 0) {
+
+            sign = sign + "-";
+            num = num *-1;
+        }
+
         String binaryRep[] = new String[10];
+        String bin = "";
 
         Arrays.fill(binaryRep, "0");
         int index = 0;
-        boolean twos = false;
-        if (num < 0) {
-            num = num * -1;
-            twos = true;
 
-        }
-        while (num > 0) {
-            binaryRep[index++] = Integer.toString(num % 2);
-            num = num / 2;
-        }
-        if (twos == true) {
-            for (int i = 0; i < binaryRep.length; i++) {
-                if (binaryRep[i].equals("1")) {
-                    binaryRep[i] = "0";
-
-                } else if (binaryRep[i].equals("0")) {
-                    binaryRep[i] = "1";
-                }
+            while (num > 0) {
+                binaryRep[index++] = Integer.toString(num % 2);
+                num = num / 2;
             }
-            if (binaryRep[0].equals("1")) {
-                binaryRep[0] = "0";
-
-            } else {
-                binaryRep[0] = "1";
+            for (int i = binaryRep.length - 1; i >= 0; i--) {
+                bin = bin + binaryRep[i];
             }
 
-        }
-        String bin = "";
-        for (int i = binaryRep.length - 1; i >= 0; i--) {
-            bin = bin + binaryRep[i];
-        }
-
-
-        return bin;
+        return sign + bin.replaceFirst ("^0*", "");
     }
 
     public static void main(String a[]) {
-        System.out.println(decToHex(88));
+        System.out.println(decToHex(-87));
+        System.out.println(decToOctal(-87));
+        System.out.println(decToBinary(-87));
 
+        System.out.println(binaryToDec("-0001010111"));
+        System.out.println(binaryToHex("-0001010111"));
+        System.out.println(binaryToOct("-0001010111"));
+
+       System.out.println(hexToDec("-057"));
+        System.out.println(hexToOctal("-057"));
+        System.out.println(hexToBinary("-057"));
+
+        System.out.println(octalToDec("-0127"));
+        System.out.println(octalToBinary("-0127"));
+        System.out.println(octToHex("-0127"));
     }
+
+
 }
